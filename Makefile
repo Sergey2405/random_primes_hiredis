@@ -6,8 +6,8 @@
 CC = g++
 # CXXFLAGS = -std=c++11 -Wall
 CXXFLAGS = -std=c++17
-LDFLAGS =
-# LDFLAGS = libredis++.a /usr/local/lib/libhiredis.a 
+# LDFLAGS =
+LDFLAGS = libredis++.a /usr/local/lib/libhiredis.a -pthread
 
 # Makefile settings - Can be customized.
 APPNAME = myapp
@@ -16,8 +16,8 @@ SRCDIR = src
 OBJDIR = obj
 
 ############## Do not change anything from here downwards! #############
-SRC0 = $(wildcard $(SRCDIR)/*$(EXT))
-SRC = $(filter-out src/generator.cpp, $(SRC0))
+SRC = $(wildcard $(SRCDIR)/*$(EXT))
+# SRC = $(filter-out src/generator.cpp, $(SRC0))
 OBJ = $(SRC:$(SRCDIR)/%$(EXT)=$(OBJDIR)/%.o)
 DEP = $(OBJ:$(OBJDIR)/%.o=%.d)
 # UNIX-based OS variables & settings
@@ -49,11 +49,12 @@ $(APPNAME): $(OBJ)
 #$(OBJDIR)/%.o: $(SRCDIR)/%$(EXT)
 #$(CC) $(CXXFLAGS) -o $@ -c $<
 $(OBJDIR)/%.o: $(SRCDIR)/%$(EXT)
-	g++ $(CXXFLAGS) -o obj/generator.o src/generator.cpp libredis++.a /usr/local/lib/libhiredis.a
+	$(CC) $(CXXFLAGS) -o obj/generator.o -c src/generator.cpp libredis++.a /usr/local/lib/libhiredis.a
+	$(CC) $(CXXFLAGS) -o obj/main.o -c src/main.cpp libredis++.a /usr/local/lib/libhiredis.a
+
 # Once again
 $(OBJDIR)/%.o: $(SRCDIR)/%$(EXT)
 	$(CC) $(CXXFLAGS) -o $@ -c $<
-
 
 # $(CC) $(CXXFLAGS) -o $@ -c $< libredis++.a /usr/local/lib/libhiredis.a
 
