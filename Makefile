@@ -17,7 +17,7 @@ OBJDIR = obj
 
 ############## Do not change anything from here downwards! #############
 SRC0 = $(wildcard $(SRCDIR)/*$(EXT))
-SRC = $(filter-out src/redis.cpp, $(SRC0))
+SRC = $(filter-out src/generator.cpp, $(SRC0))
 OBJ = $(SRC:$(SRCDIR)/%$(EXT)=$(OBJDIR)/%.o)
 DEP = $(OBJ:$(OBJDIR)/%.o=%.d)
 # UNIX-based OS variables & settings
@@ -49,7 +49,9 @@ $(APPNAME): $(OBJ)
 #$(OBJDIR)/%.o: $(SRCDIR)/%$(EXT)
 #$(CC) $(CXXFLAGS) -o $@ -c $<
 $(OBJDIR)/%.o: $(SRCDIR)/%$(EXT)
-# g++ $(CXXFLAGS) -o obj/redis.o src/redis.cpp libredis++.a /usr/local/lib/libhiredis.a
+	g++ $(CXXFLAGS) -o obj/generator.o src/generator.cpp libredis++.a /usr/local/lib/libhiredis.a
+# Once again
+$(OBJDIR)/%.o: $(SRCDIR)/%$(EXT)
 	$(CC) $(CXXFLAGS) -o $@ -c $<
 
 
