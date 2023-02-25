@@ -1,5 +1,12 @@
+#ifdef _WIN32
+#include <Windows.h>
+#else
+#include <unistd.h>
+#endif
+
 #include <sw/redis++/redis++.h>
 #include <iostream>
+#include <thread>
 
 using namespace sw::redis;
 
@@ -16,8 +23,9 @@ public:
     // Generator(const char*);
     Generator(Redis*);
     // Generator(Redis);
-    
     ~Generator();
 
+    void start_generator_loop(int);
+    void generator_loop(int);
     void cout_llen();
 };

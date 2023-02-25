@@ -1,7 +1,14 @@
+#ifdef _WIN32
+#include <Windows.h>
+#else
+#include <unistd.h>
+#endif
 #include "include/generator.h"
+#include <chrono>
 
 using namespace sw::redis;
 using namespace std;
+using namespace std::chrono;
 
 Generator::Generator(){
     // Generator("tcp://127.0.0.1:6379/0");
@@ -21,6 +28,20 @@ Generator::Generator(Redis* newredis_ptr){
 // }
 
 Generator::~Generator(){
+}
+
+void Generator::start_generator_loop(int sleeptime){
+    // std:thread th1(&Generator::generator_loop, this, sleeptime);
+    // std:thread th1(generator_loop, sleeptime);
+}
+
+void Generator::generator_loop(int sleeptime){
+// void generator_loop(int sleeptime){
+    cout << "loop <1>" << endl;
+    while(true){
+        usleep(sleeptime*1000);
+        cout << "while loop" << (system_clock::now().time_since_epoch()).count()  << endl;
+    }
 }
 
 void Generator::cout_llen(){
