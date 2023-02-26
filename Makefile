@@ -46,18 +46,8 @@ $(APPNAME): $(OBJ)
 -include $(DEP)
 
 # Building rule for .o files and its .c/.cpp in combination with all .h
-#$(OBJDIR)/%.o: $(SRCDIR)/%$(EXT)
-#$(CC) $(CXXFLAGS) -o $@ -c $<
-# $(OBJDIR)/%.o: $(SRCDIR)/%$(EXT)
-#$(CC) $(CXXFLAGS) -o obj/generator.o -c src/generator.cpp libredis++.a /usr/local/lib/libhiredis.a
-#$(CC) $(CXXFLAGS) -o obj/main.o -c src/main.cpp libredis++.a /usr/local/lib/libhiredis.a
-
-# Once again
 $(OBJDIR)/%.o: $(SRCDIR)/%$(EXT)
 	$(CC) $(CXXFLAGS) -o $@ -c $<
-
-# $(CC) $(CXXFLAGS) -o $@ -c $< libredis++.a /usr/local/lib/libhiredis.a
-
 
 ################### Cleaning rules for Unix-based OS ###################
 # Cleans complete project

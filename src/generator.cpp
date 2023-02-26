@@ -5,7 +5,6 @@ using namespace std;
 using namespace std::chrono;
 
 Generator::Generator(){
-    // Generator("tcp://127.0.0.1:6379/0");
 }
 
 // Generator::Generator(const char* url){
@@ -16,21 +15,19 @@ Generator::Generator(){
 Generator::Generator(Redis* newredis_ptr, int rate_per_second){
     redis_ptr = newredis_ptr;
     this->rate_per_second = rate_per_second;
-    this->rate_history = new long int[this->rate_per_second];
-    // memset(this->rate_history, 777, rate_per_second * sizeof(int));
-    // this->rate_history = new int[this->rate_per_second](999);
+    this->rate_history = new long long int [this->rate_per_second]; //auto type 
     this->history_int_ptr = 0;
 
-
-    // int current_ts = (system_clock::now().time_since_epoch()).count();
+    // needs to init properly 
+    long long int current_ts = (system_clock::now().time_since_epoch()).count();//auto type 
     for(int i=0; i < this->rate_per_second; i++){ 
-        static int current_ts = (system_clock::now().time_since_epoch()).count();
+        // static int current_ts = (system_clock::now().time_since_epoch()).count();
         this->rate_history[i] = current_ts; 
     }
 
-    for(int i=0; i < this->rate_per_second; i++){ 
-        cout << this->rate_history[i] << endl; 
-    } 
+    // for(int i=0; i < this->rate_per_second; i++){ 
+    //     cout << this->rate_history[i] << endl; 
+    // } 
 }
 
 // Generator::Generator(Redis &newredis){
@@ -40,17 +37,24 @@ Generator::Generator(Redis* newredis_ptr, int rate_per_second){
 Generator::~Generator(){
 }
 
-void Generator::start_generator_loop(int sleeptime){
-    thread th1(&Generator::generator_loop, *this, sleeptime);
-    th1.join();
+void Generator::start_generator_loop(){
+    int sleeptime = 1000000 / rate_per_second; //us
+    thread generator_thread(&Generator::generator_loop, *this, sleeptime);
+    generator_thread.join();
 }
 
 void Generator::generator_loop(int sleeptime){
-// void generator_loop(int sleeptime){
-    cout << "loop <1>" << endl;
+    // auto current_ts = (system_clock::now().time_since_epoch()).count();
     while(true){
-        usleep(sleeptime*1000);
-        cout << "while loop " << (system_clock::now().time_since_epoch()).count()  << endl;
+        auto current_ts = (system_clock::now().time_since_epoch()).count();
+        auto old_previoius_ts = rate_history[history_int_ptr];
+        history_int_ptr = (history_int_ptr + 1) % rate_per_second;
+        rate_history[history_int_ptr] = current_ts;
+        if(current_ts - old_previoius_ts < 1000000000)
+            usleep(sleeptime);//ns
+        else if(rate_per_second < 1000)         // 1 ms sleep inteval criteria
+            usleep(sleeptime - sleeptime / 10); //90% sleep interval
+        cout << "while loop " <<  history_int_ptr << " " << rate_history[history_int_ptr] << endl;
     }
 }
 

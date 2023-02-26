@@ -14,12 +14,10 @@ using namespace sw::redis;
 // class Generator : public Redis{
 class Generator{
 private:
-    Redis* redis_ptr = nullptr;//works
+    Redis* redis_ptr = nullptr;
     int rate_per_second;
-    long int* rate_history;
+    long long int* rate_history;
     int history_int_ptr = 0;
-    // sw::redis::Redis myredis = Redis("tcp://127.0.0.1:6379/0");// works
-    // Redis genredis = Redis("tcp://127.0.0.1:6379/0");// works
 public:
     Generator();
     // Generator(const char*);
@@ -27,7 +25,7 @@ public:
     Generator(Redis*, int);
     ~Generator();
 
-    void start_generator_loop(int);
+    void start_generator_loop();
     void generator_loop(int);
     void cout_llen();
 };
