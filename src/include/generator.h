@@ -8,6 +8,10 @@
 #include <iostream>
 #include <thread>
 #include <chrono>
+#include <random>
+#include <string>
+
+#include "config.h"
 
 using namespace sw::redis;
 
@@ -16,13 +20,17 @@ class Generator{
 private:
     Redis* redis_ptr = nullptr;
     int rate_per_second;
+    int range;
+    const char* number_list_key;
+
     long long int* rate_history;
     int history_int_ptr = 0;
+
 public:
     Generator();
     // Generator(const char*);
     // Generator(Redis*);
-    Generator(Redis*, int);
+    Generator(Redis*, int, int, const char*);
     ~Generator();
 
     void start_generator_loop();

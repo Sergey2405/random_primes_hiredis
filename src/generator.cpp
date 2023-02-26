@@ -12,11 +12,16 @@ Generator::Generator(){
 //     Generator(&redis);
 // }
 
-Generator::Generator(Redis* newredis_ptr, int rate_per_second){
-    redis_ptr = newredis_ptr;
-    this->rate_per_second = rate_per_second;
+Generator::Generator(Redis* new_redis_ptr, int new_range, int new_rate_per_second, const char* new_number_list_key){
+    this->redis_ptr = new_redis_ptr;
+    this->rate_per_second = new_rate_per_second;
+    this->range = new_range;
+    this->number_list_key = new_number_list_key;
+
     this->rate_history = new long long int [this->rate_per_second]; //auto type 
     this->history_int_ptr = 0;
+ 
+
 
     // needs to init properly 
     long long int current_ts = (system_clock::now().time_since_epoch()).count();//auto type 
@@ -44,7 +49,10 @@ void Generator::start_generator_loop(){
 }
 
 void Generator::generator_loop(int sleeptime){
-    // auto current_ts = (system_clock::now().time_since_epoch()).count();
+    default_random_engine generator;
+    uniform_int_distribution<int> distribution(2,this->range);
+    int random_number =  distribution(generator);// the first generation is idle
+
     while(true){
         auto current_ts = (system_clock::now().time_since_epoch()).count();
         auto old_previoius_ts = rate_history[history_int_ptr];
@@ -54,12 +62,20 @@ void Generator::generator_loop(int sleeptime){
             usleep(sleeptime);//ns
         else if(rate_per_second < 1000)         // 1 ms sleep inteval criteria
             usleep(sleeptime - sleeptime / 10); //90% sleep interval
-        cout << "while loop " <<  history_int_ptr << " " << rate_history[history_int_ptr] << endl;
+        
+        random_number =  distribution(generator);
+
+        this->redis_ptr->lpush(NUMBER_LIST_KEY, to_string(random_number)); 
+
+        // cout << "while loop " <<  history_int_ptr << " " << rate_history[history_int_ptr]
+        //      << " " << random_number << endl;
     }
 }
 
 void Generator::cout_llen(){
     // auto myredis = Redis("tcp://127.0.0.1:6379/0");
-    cout << "redis.llen(\"number_list:2\")=" << redis_ptr->llen("number_list:2") << endl;
+    // cout << "redis.llen(\"number_list:2\")=" << redis_ptr->llen("number_list:2") << endl;
+    cout << "redis.llen(\"number_list:2\")=" << redis_ptr->llen(NUMBER_LIST_KEY) << endl;
     cout << typeid(*redis_ptr).name() << endl;
 }
+
