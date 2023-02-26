@@ -1,10 +1,4 @@
-#ifdef _WIN32
-#include <Windows.h>
-#else
-#include <unistd.h>
-#endif
 #include "include/generator.h"
-#include <chrono>
 
 using namespace sw::redis;
 using namespace std;
@@ -19,8 +13,24 @@ Generator::Generator(){
 //     Generator(&redis);
 // }
 
-Generator::Generator(Redis* newredis_ptr){
+Generator::Generator(Redis* newredis_ptr, int rate_per_second){
     redis_ptr = newredis_ptr;
+    this->rate_per_second = rate_per_second;
+    this->rate_history = new long int[this->rate_per_second];
+    // memset(this->rate_history, 777, rate_per_second * sizeof(int));
+    // this->rate_history = new int[this->rate_per_second](999);
+    this->history_int_ptr = 0;
+
+
+    // int current_ts = (system_clock::now().time_since_epoch()).count();
+    for(int i=0; i < this->rate_per_second; i++){ 
+        static int current_ts = (system_clock::now().time_since_epoch()).count();
+        this->rate_history[i] = current_ts; 
+    }
+
+    for(int i=0; i < this->rate_per_second; i++){ 
+        cout << this->rate_history[i] << endl; 
+    } 
 }
 
 // Generator::Generator(Redis &newredis){
@@ -31,8 +41,8 @@ Generator::~Generator(){
 }
 
 void Generator::start_generator_loop(int sleeptime){
-    // std:thread th1(&Generator::generator_loop, this, sleeptime);
-    // std:thread th1(generator_loop, sleeptime);
+    thread th1(&Generator::generator_loop, *this, sleeptime);
+    th1.join();
 }
 
 void Generator::generator_loop(int sleeptime){
@@ -40,7 +50,7 @@ void Generator::generator_loop(int sleeptime){
     cout << "loop <1>" << endl;
     while(true){
         usleep(sleeptime*1000);
-        cout << "while loop" << (system_clock::now().time_since_epoch()).count()  << endl;
+        cout << "while loop " << (system_clock::now().time_since_epoch()).count()  << endl;
     }
 }
 
