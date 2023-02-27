@@ -40,11 +40,8 @@ std::thread* Generator::start(){
     cout << "enter Generator::start()" << endl;
     int sleeptime = 1000000 / rate_per_second; //us
     static thread generator_thread(&Generator::generator_loop, *this, sleeptime);
-    // thread generator_thread(&Generator::generator_loop, *this, sleeptime);
 
     cout << "join Generator::start()" << endl;
-    // generator_thread.join(); 
-    // generator_thread.detach();
     cout << "exit Generator::start()" << endl;
     return &generator_thread;
 }
@@ -60,7 +57,7 @@ void Generator::generator_loop(int sleeptime){
         history_int_ptr = (history_int_ptr + 1) % rate_per_second;
         rate_history[history_int_ptr] = current_ts;
         if(current_ts - old_previoius_ts < 1000000000)
-            usleep(sleeptime);//ns
+            usleep(sleeptime);//ms
         else if(rate_per_second < 1000)         // 1 ms sleep inteval criteria
             usleep(sleeptime - sleeptime / 10); //90% sleep interval
         
