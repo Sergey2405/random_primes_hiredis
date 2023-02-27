@@ -1,6 +1,6 @@
 #include "include/generator.h"
 
-using namespace sw::redis;
+// using namespace sw::redis; 
 using namespace std;
 using namespace std::chrono;
 
@@ -21,8 +21,6 @@ Generator::Generator(Redis* new_redis_ptr, int new_range, int new_rate_per_secon
     this->rate_history = new long long int [this->rate_per_second]; //auto type 
     this->history_int_ptr = 0;
  
-
-
     // needs to init properly 
     long long int current_ts = (system_clock::now().time_since_epoch()).count();//auto type 
     for(int i=0; i < this->rate_per_second; i++){ 
@@ -35,17 +33,20 @@ Generator::Generator(Redis* new_redis_ptr, int new_range, int new_rate_per_secon
     // } 
 }
 
-// Generator::Generator(Redis &newredis){
-//     redis_ptr = &newredis;
-// }
-
 Generator::~Generator(){
 }
 
-void Generator::start_generator_loop(){
+std::thread* Generator::start(){
+    cout << "enter Generator::start()" << endl;
     int sleeptime = 1000000 / rate_per_second; //us
-    thread generator_thread(&Generator::generator_loop, *this, sleeptime);
-    generator_thread.join();
+    static thread generator_thread(&Generator::generator_loop, *this, sleeptime);
+    // thread generator_thread(&Generator::generator_loop, *this, sleeptime);
+
+    cout << "join Generator::start()" << endl;
+    // generator_thread.join(); 
+    // generator_thread.detach();
+    cout << "exit Generator::start()" << endl;
+    return &generator_thread;
 }
 
 void Generator::generator_loop(int sleeptime){

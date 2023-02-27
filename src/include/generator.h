@@ -5,7 +5,7 @@
 #endif
 
 #include <sw/redis++/redis++.h>
-#include <iostream>
+#include <iostream> // for debug  
 #include <thread>
 #include <chrono>
 #include <random>
@@ -15,7 +15,6 @@
 
 using namespace sw::redis;
 
-// class Generator : public Redis{
 class Generator{
 private:
     Redis* redis_ptr = nullptr;
@@ -33,7 +32,7 @@ public:
     Generator(Redis*, int, int, const char*);
     ~Generator();
 
-    void start_generator_loop();
+    std::thread* start();
     void generator_loop(int);
     void cout_llen();
 };
