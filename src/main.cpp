@@ -9,7 +9,7 @@ int main(int arg_count, char * args[]){
     auto main_redis = Redis(string("tcp://") + HIREDIS_HOST + ":" + to_string(HIREDIS_PORT) + "/0");
     
     Generator main_generator(&main_redis, PRIME_RANGE, RATE_PER_SECOND, NUMBER_LIST_KEY);
-    auto main_generator_thread = main_generator.start();
+    // auto main_generator_thread = main_generator.start();
     thread* main_generator_thread_ptr = main_generator.start();
     cout << "main main_generator.start() ed" << endl;
     // main_generator.cout_llen(); // remove it 

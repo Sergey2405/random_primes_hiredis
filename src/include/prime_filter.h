@@ -7,7 +7,6 @@
 #include <sw/redis++/redis++.h>
 #include <thread>
 #include <iostream>
-// #include <chrono>
 
 #include "config.h" 
 
@@ -23,4 +22,5 @@ public:
 
     thread* start();
     void filter_loop();
+    bool is_prime(int);
 };

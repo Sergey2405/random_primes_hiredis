@@ -10,7 +10,7 @@ CXXFLAGS = -std=c++17
 LDFLAGS = libredis++.a /usr/local/lib/libhiredis.a -pthread
 
 # Makefile settings - Can be customized.
-APPNAME = myapp
+APPNAME = random_primes_hiredis
 EXT = .cpp
 SRCDIR = src
 OBJDIR = obj
