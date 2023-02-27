@@ -57,7 +57,7 @@ void Generator::generator_loop(int sleeptime){
         history_int_ptr = (history_int_ptr + 1) % rate_per_second;
         rate_history[history_int_ptr] = current_ts;
         if(current_ts - old_previoius_ts < 1000000000)
-            usleep(sleeptime);//ms
+            usleep(sleeptime);//us
         else if(rate_per_second < 1000)         // 1 ms sleep inteval criteria
             usleep(sleeptime - sleeptime / 10); //90% sleep interval
         
