@@ -7,11 +7,6 @@ using namespace std::chrono;
 Generator::Generator(){
 }
 
-// Generator::Generator(const char* url){
-//     auto redis = Redis(url);
-//     Generator(&redis);
-// }
-
 Generator::Generator(Redis* new_redis_ptr, int new_range, int new_rate_per_second, const char* new_number_list_key){
     this->redis_ptr = new_redis_ptr;
     this->rate_per_second = new_rate_per_second;
