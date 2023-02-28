@@ -27,12 +27,9 @@ private:
 
 public:
     Generator();
-    // Generator(const char*);
-    // Generator(Redis*);
     Generator(Redis*, int, int, const char*);
     ~Generator();
 
     std::thread* start();
     void generator_loop(int);
-    void cout_llen();
 };

@@ -17,8 +17,11 @@ using namespace std;
 class PrimeFilter{
 private:
     Redis* redis_ptr = nullptr;
+    int rate_per_second;
+    const char* number_list_key;
+    const char* prime_set_key;
 public:
-    PrimeFilter(Redis*);
+    PrimeFilter(Redis*, const char*, const char*);
     ~PrimeFilter();
 
     thread* start();

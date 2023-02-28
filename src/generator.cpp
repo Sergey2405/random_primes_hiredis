@@ -18,26 +18,18 @@ Generator::Generator(Redis* new_redis_ptr, int new_range, int new_rate_per_secon
  
     // needs to init properly 
     long long int current_ts = (system_clock::now().time_since_epoch()).count();//auto type 
-    for(int i=0; i < this->rate_per_second; i++){ 
-        // static int current_ts = (system_clock::now().time_since_epoch()).count();
+    for(int i=0; i < this->rate_per_second; i++){
         this->rate_history[i] = current_ts; 
     }
-
-    // for(int i=0; i < this->rate_per_second; i++){ 
-    //     cout << this->rate_history[i] << endl; 
-    // } 
 }
 
 Generator::~Generator(){
 }
 
 std::thread* Generator::start(){
-    cout << "enter Generator::start()" << endl;
     int sleeptime = 1000000 / rate_per_second; //us
     static thread generator_thread(&Generator::generator_loop, *this, sleeptime);
 
-    cout << "join Generator::start()" << endl;
-    cout << "exit Generator::start()" << endl;
     return &generator_thread;
 }
 
@@ -58,17 +50,6 @@ void Generator::generator_loop(int sleeptime){
         
         random_number =  distribution(generator);
 
-        this->redis_ptr->lpush(NUMBER_LIST_KEY, to_string(random_number)); 
-
-        // cout << "while loop " <<  history_int_ptr << " " << rate_history[history_int_ptr]
-        //      << " " << random_number << endl;
+        this->redis_ptr->lpush(this->number_list_key, to_string(random_number));
     }
 }
-
-void Generator::cout_llen(){
-    // auto myredis = Redis("tcp://127.0.0.1:6379/0");
-    // cout << "redis.llen(\"number_list:2\")=" << redis_ptr->llen("number_list:2") << endl;
-    cout << "redis.llen(\"number_list:2\")=" << redis_ptr->llen(NUMBER_LIST_KEY) << endl;
-    cout << typeid(*redis_ptr).name() << endl;
-}
-
