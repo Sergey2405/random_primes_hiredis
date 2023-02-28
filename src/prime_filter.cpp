@@ -27,27 +27,26 @@ void PrimeFilter::filter_loop(){
     cout << "enter PrimeFilter::filter_loop()" << endl;
     while(true){
         // usleep(250000); 
-        auto current_value = this->redis_ptr->brpop(NUMBER_LIST_KEY, 1); 
-        // auto current_value = this->redis_ptr->rpop(NUMBER_LIST_KEY); USE IT since brpop block the connection! 
+        // auto current_value = this->redis_ptr->brpop(NUMBER_LIST_KEY, 1);
+        auto current_value = this->redis_ptr->rpop(NUMBER_LIST_KEY); //USE IT since brpop block the connection! 
 
         if(current_value){
             try{
-                    int number_value = stoi(current_value->second);
+                    // int number_value = stoi(current_value->second);
+                    int number_value = stoi(*current_value);
                     if (is_prime(number_value)){
                         cout << "PrimeFilter::filter_loop() prime:" << number_value << endl;
-                        this->redis_ptr->sadd(PRIME_SET_KEY, current_value->second);
+                        // this->redis_ptr->sadd(PRIME_SET_KEY, current_value->second);
+                        this->redis_ptr->sadd(PRIME_SET_KEY, *current_value);
                     }
-
-                    cout << "PrimeFilter::filter_loop() current_value->first=" << current_value->first << " "
-                         << " current_value->second=" << current_value->second << " "
-                    // << stoi(*current_value)+1
-                         <<" type: " << typeid(current_value).name() << endl;
+                    // cout << "PrimeFilter::filter_loop() " << *current_value << " " << endl;
             }
             catch(...){
-                cout << "PrimeFilter::filter_loop() error covertation" << endl; 
+                // cout << "PrimeFilter::filter_loop() error covertation" << endl; 
             }
         }else{
-            cout << "PrimeFilter::filter_loop() nullptr" << endl;
+            usleep(1000000);
+            // cout << "PrimeFilter::filter_loop() nullptr" << endl;
         }
     }
 }
