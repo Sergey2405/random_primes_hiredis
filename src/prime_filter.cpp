@@ -45,8 +45,7 @@ void PrimeFilter::filter_loop(){
                 // cout << "PrimeFilter::filter_loop() error covertation" << endl; 
             }
         }else{
-            usleep(1000000);
-            // cout << "PrimeFilter::filter_loop() nullptr" << endl;
+            usleep(1000000);   //1 sec
         }
     }
 }
@@ -54,11 +53,13 @@ void PrimeFilter::filter_loop(){
 bool PrimeFilter::is_prime(int number){
     bool result=true;
     if(number % 2 == 0) return false;
+    int criteria = (int)sqrt(number);
     for(int i = 3;
-        i < number;
-        i+=2){
+        i < criteria;
+        i += 2){
         if(number % i == 0){
             number/=i;
+            criteria = (int)sqrt(number);
             result=false;
             break;
         }

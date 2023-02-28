@@ -7,6 +7,7 @@
 #include <sw/redis++/redis++.h>
 #include <thread>
 #include <iostream>
+#include <math.h>
 
 #include "config.h" 
 
