@@ -3,8 +3,6 @@
 using namespace std;
 using namespace std::chrono;
 
-#include <typeinfo> //remove it 
-
 PrimeFilter::PrimeFilter(Redis* new_redis_ptr,
                          const char* new_number_list_key,
                          const char* new_prime_set_key){

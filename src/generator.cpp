@@ -19,7 +19,7 @@ Generator::Generator(Redis* new_redis_ptr, int new_range, int new_rate_per_secon
     // needs to init properly 
     long long int current_ts = (system_clock::now().time_since_epoch()).count();//auto type 
     for(int i=0; i < this->rate_per_second; i++){
-        this->rate_history[i] = current_ts; 
+        this->rate_history[i] = current_ts;
     }
 }
 

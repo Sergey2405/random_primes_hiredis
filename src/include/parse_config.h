@@ -4,8 +4,8 @@
 
 class ParseConfig{
 private:
-    int prime_range = PRIME_RANGE;
-    int rate_per_second = RATE_PER_SECOND;
+    signed int prime_range = PRIME_RANGE;
+    signed int rate_per_second = RATE_PER_SECOND;
 
     const char* hiredis_host = HIREDIS_HOST;
     int hiredis_port = HIREDIS_PORT;

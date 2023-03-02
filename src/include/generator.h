@@ -5,7 +5,6 @@
 #endif
 
 #include <sw/redis++/redis++.h>
-#include <iostream> // for debug  
 #include <thread>
 #include <chrono>
 #include <random>
@@ -18,12 +17,12 @@ using namespace sw::redis;
 class Generator{
 private:
     Redis* redis_ptr = nullptr;
-    int rate_per_second;
-    int range;
+    signed int rate_per_second;
+    signed int range;
     const char* number_list_key;
 
-    long long int* rate_history;
-    int history_int_ptr = 0;
+    signed long long int* rate_history;
+    signed int history_int_ptr = 0;
 
 public:
     Generator();
