@@ -1,4 +1,4 @@
-#define GLOBAL_LOG_LEVEL "error"
+#define GLOBAL_LOG_LEVEL "err"
 
 // generator
 #define PRIME_RANGE 1000000
