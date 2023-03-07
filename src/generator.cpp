@@ -1,6 +1,5 @@
 #include "include/generator.h"
 
-// using namespace sw::redis; 
 using namespace std;
 using namespace std::chrono;
 

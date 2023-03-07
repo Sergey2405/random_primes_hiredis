@@ -1,3 +1,5 @@
+#define GLOBAL_LOG_LEVEL "error"
+
 // generator
 #define PRIME_RANGE 1000000
 #define RATE_PER_SECOND 10

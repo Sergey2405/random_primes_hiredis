@@ -1,5 +1,4 @@
-#include <string>
-//  #include "spdlog/spdlog.h" 
+#include <spdlog/spdlog.h>
 #include "config.h"
 
 class ParseConfig{
@@ -11,6 +10,8 @@ private:
     int hiredis_port = HIREDIS_PORT;
     const char* number_list_key = NUMBER_LIST_KEY;
     const char* prime_set_key = PRIME_SET_KEY;
+    const char* log_level = GLOBAL_LOG_LEVEL;
+
 
 public:
     ParseConfig();
@@ -24,4 +25,5 @@ public:
     int get_redis_port(){return hiredis_port;};
     const char* get_number_list_key(){return number_list_key;};
     const char* get_prime_set_key(){return prime_set_key;};
+    const char* get_log_level(){return log_level;};
 };

@@ -1,7 +1,8 @@
 #include "include/parse_config.h"
 
 using namespace std;
-// using namespace spdlog; 
+
+extern const char* global_log_level;
 
 ParseConfig::ParseConfig(){
     prime_range = PRIME_RANGE;
@@ -11,42 +12,59 @@ ParseConfig::ParseConfig(){
     hiredis_port = HIREDIS_PORT;
     number_list_key = NUMBER_LIST_KEY;
     prime_set_key = PRIME_SET_KEY;
+    log_level = GLOBAL_LOG_LEVEL;
 }
 
 ParseConfig::ParseConfig(int arg_count, char * args[]){
     if(arg_count >= 6){
         try{
             prime_range = stoi((const char*)args[1]);
-            // cout << "ParseConfig::ParseConfig prime_range=" << prime_range << endl; 
-            // info("ParseConfig::ParseConfig prime_range={}", prime_range);
+            spdlog::info("ParseConfig::ParseConfig prime_range={}", prime_range);
             rate_per_second = stoi((const char*)args[2]);
-            // cout << "ParseConfig::ParseConfig rate_per_second=" << rate_per_second << endl; 
-            // info("ParseConfig::ParseConfig rate_per_second={}", rate_per_second);
+            spdlog::info("ParseConfig::ParseConfig rate_per_second={}", rate_per_second);
 
             hiredis_host = (const char*)args[3];
-            // cout << "ParseConfig::ParseConfig = hiredis_host" << hiredis_host << endl; 
-            // info("ParseConfig::ParseConfig hiredis_host={}", hiredis_host);
+            spdlog::info("ParseConfig::ParseConfig hiredis_host={}", hiredis_host);
             hiredis_port = stoi((const char*)args[4]);
-            // cout << "ParseConfig::ParseConfig = hiredis_port" << hiredis_port << endl; 
-            // info("ParseConfig::ParseConfig hiredis_port={}", hiredis_port);
+            spdlog::info("ParseConfig::ParseConfig hiredis_port={}", hiredis_port);
             number_list_key = (const char*)args[5];
-            // cout << "ParseConfig::ParseConfig = number_list_key" << number_list_key << endl; 
-            // info("ParseConfig::ParseConfig = number_list_key={}", number_list_key);
+            spdlog::info("ParseConfig::ParseConfig number_list_key={}", number_list_key);
 
             //enables fetch numbers
-            if(arg_count >= 7) prime_set_key = (const char*)args[6];
-            else prime_set_key = "";
-            // cout << "ParseConfig::ParseConfig prime_set_key=" << prime_set_key << endl; 
-            // info("ParseConfig::ParseConfig prime_set_key=", prime_set_key);
+            if((arg_count >= 7) &&
+               (strcmp((const char*)args[6], "trace")) &&
+               (strcmp((const char*)args[6], "debug")) &&
+               (strcmp((const char*)args[6], "info" )) &&
+               (strcmp((const char*)args[6], "warn" )) &&
+               (strcmp((const char*)args[6], "err"  )) &&
+               (strcmp((const char*)args[6], "critical" ))){
+                prime_set_key = (const char*)args[6];
+            }
+            else{
+                prime_set_key = "";
+            }
+
+            spdlog::info("ParseConfig::ParseConfig prime_set_key={}", prime_set_key);
+
+            log_level = GLOBAL_LOG_LEVEL;
+            if((!strcmp((const char*)args[arg_count - 1], "trace"   )) ||
+               (!strcmp((const char*)args[arg_count - 1], "debug"   )) ||
+               (!strcmp((const char*)args[arg_count - 1], "info"    )) ||
+               (!strcmp((const char*)args[arg_count - 1], "warn"    )) ||
+               (!strcmp((const char*)args[arg_count - 1], "err"     )) ||
+               (!strcmp((const char*)args[arg_count - 1], "critical")))
+            {
+                log_level = (const char*)args[arg_count - 1];
+            }
+
+            spdlog::info("ParseConfig::ParseConfig log_level={}", log_level);
         }
         catch(...){
-            // cout << "ParseConfig::ParseConfig error configuration" << endl; 
-            // error("ParseConfig::ParseConfig error configuration");
+            spdlog::error("ParseConfig::ParseConfig error configuration");
             ParseConfig();
         }
     }else{
-        // cout << "ParseConfig::ParseConfig default conversation" << endl; 
-        // info("ParseConfig::ParseConfig default conversation");
+        spdlog::info("ParseConfig::ParseConfig default conversation");
         ParseConfig();
     }
 }

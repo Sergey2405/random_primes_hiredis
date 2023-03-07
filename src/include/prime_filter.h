@@ -1,14 +1,6 @@
-// #ifdef _WIN32
-// #include <Windows.h>
-// #else
-// #include <unistd.h>
-// #endif 
-
-// #include <iostream> //for debug 
 #include <sw/redis++/redis++.h>
-#include <spdlog/spdlog.h> 
+#include <spdlog/spdlog.h>
 #include <thread>
-// #include "spdlog/spdlog.h" 
 #include <math.h>
 
 #include "config.h" 
