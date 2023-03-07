@@ -2,6 +2,7 @@
 
 using namespace std;
 using namespace std::chrono;
+// using namespace spdlog; 
 
 PrimeFilter::PrimeFilter(Redis* new_redis_ptr,
                          const char* new_number_list_key,
@@ -21,6 +22,7 @@ thread* PrimeFilter::start(){
 }
 
 void PrimeFilter::filter_loop(){
+    // set_level(spdlog::level::debug); 
     while(true){
         //USE IT since brpop block the connection!
         auto current_value = this->redis_ptr->rpop(this->number_list_key);
@@ -29,14 +31,18 @@ void PrimeFilter::filter_loop(){
             try{
                 int number_value = stoi(*current_value);
                 if (is_prime(number_value)){
-                    cout << "PrimeFilter::filter_loop() prime:" << number_value << endl;
+                    // cout << "PrimeFilter::filter_loop() prime:" << number_value << endl;  
+                    spdlog::debug("PrimeFilter::filter_loop() prime: {}", number_value);
                     this->redis_ptr->sadd(this->prime_set_key, *current_value);
                 }
             }
             catch(...){
-                cout << "PrimeFilter::filter_loop() error covertation" << *current_value << endl;
+                // cout << "PrimeFilter::filter_loop() error covertation" << *current_value << endl; 
+                spdlog::warn("PrimeFilter::filter_loop() error convertation {}", *current_value); 
+                // spdlog::warn("PrimeFilter::filter_loop() error convertation");
             }
         }else{
+            spdlog::debug("PrimeFilter::filter_loop() sleep for one second");
             usleep(1000000);   //1 sec
         }
     }

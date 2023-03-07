@@ -1,12 +1,15 @@
-#include <iostream>
+// #include <iostream> 
+#include <spdlog/spdlog.h>
 #include "include/parse_config.h"
 #include "include/generator.h"
 #include "include/prime_filter.h"
 
 using namespace std;
+// using namespace spdlog; 
 
 // ./random_primes_hiredis 1000000 1 "127.0.0.1" 6379 "number_list:2" "prime_set:2"
 int main(int arg_count, char * args[]){
+    // set_level(spdlog::level::info);
 
     ParseConfig parsed_config(arg_count, args);
 

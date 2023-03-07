@@ -1,5 +1,5 @@
-#include <iostream> //for debug 
-#include <string> //?
+#include <string>
+//  #include "spdlog/spdlog.h" 
 #include "config.h"
 
 class ParseConfig{
@@ -14,7 +14,6 @@ private:
 
 public:
     ParseConfig();
-    // ParseConfig(int, char*);
     ParseConfig(int arg_count, char * args[]);
     ~ParseConfig();
 
