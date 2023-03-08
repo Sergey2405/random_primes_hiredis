@@ -62,5 +62,3 @@ bool PrimeFilter::is_prime(int number){
     }
     return result;
 }
-
-

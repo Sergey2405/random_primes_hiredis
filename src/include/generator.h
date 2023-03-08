@@ -21,8 +21,8 @@ private:
     signed int range;
     const char* number_list_key;
 
-    signed long long int* rate_history;
-    signed int history_int_ptr = 0;
+    long long unsigned int* rate_history;
+    unsigned int history_int_ptr = 0;
 
 public:
     Generator();
