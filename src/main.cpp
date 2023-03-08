@@ -1,14 +1,30 @@
-#include <iostream>
+#include <spdlog/spdlog.h>
 #include "include/parse_config.h"
 #include "include/generator.h"
 #include "include/prime_filter.h"
 
-using namespace std;
+const char* global_log_level;
 
-// ./random_primes_hiredis 1000000 1 "127.0.0.1" 6379 "number_list:2" "prime_set:2"
+void set_global_log_level(){
+    if     (!strcmp(global_log_level, "trace"   )) spdlog::set_level(spdlog::level::trace   );
+    else if(!strcmp(global_log_level, "trace"   )) spdlog::set_level(spdlog::level::trace   );
+    else if(!strcmp(global_log_level, "debug"   )) spdlog::set_level(spdlog::level::debug   );
+    else if(!strcmp(global_log_level, "info"    )) spdlog::set_level(spdlog::level::info    );
+    else if(!strcmp(global_log_level, "warn"    )) spdlog::set_level(spdlog::level::warn    );
+    else if(!strcmp(global_log_level, "err"     )) spdlog::set_level(spdlog::level::err     );
+    else if(!strcmp(global_log_level, "critical")) spdlog::set_level(spdlog::level::critical);
+    else                                     spdlog::set_level(spdlog::level::off);
+}
+
+// ./random_primes_hiredis 100000000 20 192.168.0.14 6379 number_list:2 prime_set:2 debug
 int main(int arg_count, char * args[]){
 
+    // set info at first before parsing config
+    spdlog::set_level(spdlog::level::info);
+
     ParseConfig parsed_config(arg_count, args);
+    global_log_level = parsed_config.get_log_level();
+    set_global_log_level();
 
     auto main_redis = Redis(string("tcp://") + parsed_config.get_redis_host() + ":" +
                             to_string(parsed_config.get_redis_port()) + "/0");

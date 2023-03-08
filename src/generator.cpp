@@ -1,6 +1,5 @@
 #include "include/generator.h"
 
-// using namespace sw::redis; 
 using namespace std;
 using namespace std::chrono;
 
@@ -13,11 +12,11 @@ Generator::Generator(Redis* new_redis_ptr, int new_range, int new_rate_per_secon
     this->range = new_range;
     this->number_list_key = new_number_list_key;
 
-    this->rate_history = new long long int [this->rate_per_second]; //auto type 
+    this->rate_history = new long long unsigned int [this->rate_per_second]; //auto type 
     this->history_int_ptr = 0;
  
     // needs to init properly 
-    long long int current_ts = (system_clock::now().time_since_epoch()).count();//auto type 
+    long long unsigned int current_ts = (system_clock::now().time_since_epoch()).count();//auto type 
     for(int i=0; i < this->rate_per_second; i++){
         this->rate_history[i] = current_ts;
     }
